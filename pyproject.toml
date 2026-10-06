@@ -1,0 +1,47 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "flight-airblock"
+version = "0.1.0a1"
+description = "An educational Airblock simulator and cautious BLE diagnostic toolkit"
+readme = "README.md"
+requires-python = ">=3.11"
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Programming Language :: Python :: 3",
+  "Topic :: Education",
+]
+
+[project.optional-dependencies]
+ble = ["bleak==3.0.2"]
+dev = ["pytest>=8,<10", "pytest-cov>=5,<8", "ruff>=0.11,<1", "mypy>=1.15,<2", "build>=1.2,<2"]
+
+[project.scripts]
+flight = "airblock.cli:main"
+
+[project.urls]
+Repository = "https://github.com/juliocesardiaz/flight"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+airblock = ["py.typed"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "--strict-markers"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+files = ["src"]
