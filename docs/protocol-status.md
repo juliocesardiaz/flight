@@ -84,3 +84,41 @@ If these prerequisites cannot be established, remain at inspection. A successful
 BLE connection does not justify experimenting with unrecognized commands.
 Live movement is outside this release and needs a separate safety design,
 validated control/failsafe behavior, supervision, and appropriate authorization.
+
+## Motor-test readiness gate
+
+Reviewed 7 October 2026 for the student Bluetooth lab. **No motor test is ready.**
+The diagnostic code has no GATT write path. A fresh review of the community
+[AirBlockManager at commit 3519fe6](https://github.com/Arcaneless/MyoAirblock-android/blob/3519fe6cafc546d1eeccfe9aa2b6fd5ca4aba451/app/src/main/java/com/arcaneless/myoairblock/AirBlockManager.java)
+shows that `initDevice()` starts recurring heartbeat, turn-on, and angle-request
+messages. Its turn-on task repeats every 200 ms until a state response removes
+it. This is evidence about that implementation only; it does not verify safe
+motor behavior on this kit. Do not adapt it as a connection or bench-test recipe.
+The official Airblock manual and app-guide downloads could not be opened during
+this review; no security-warning bypass was attempted. No authoritative,
+model-specific motor test with validated stop/link-loss behavior was established.
+
+Before a maintainer adds motor commands, require all of the following:
+
+1. Exact hardware/firmware identity and a reliable Airblock-specific specification
+   or independently validated, authorized capture for start, speed, stop, framing,
+   checksums, units/ranges, write mode, state prerequisites, and acknowledgments.
+   Generic Makeblock motor commands and a GATT profile match are insufficient.
+2. Independently grounded byte-vector tests and reviewed error handling. Establish
+   a reliable stop path, bounded command duration, and actual behavior after link
+   loss, process crash, cancellation, and failed writes. A host timer or `finally`
+   block alone cannot guarantee a stopped motor after a lost connection.
+3. A teacher-approved, manufacturer-compatible secured bench procedure, including
+   safe propeller removal if supported, conservative speed and short fixed duration,
+   physical power cutoff accessible without reaching moving parts, and stopping
+   criteria. Do not guess a speed or duration before the units and limits are known.
+   If propellers cannot safely be removed or stop/failsafe behavior is unknown,
+   do not proceed.
+4. Teacher supervision and explicit approval of the final procedure before the
+   student attaches any propulsion hardware. No autonomous flight, takeoff, or
+   hover command is part of the student Bluetooth lab.
+
+The useful next evidence is the student's selected-device inspection report and
+kit model/manual, with firmware marked unknown if necessary. Do not send an
+unverified firmware query simply to fill in the worksheet. The motor milestone
+stays blocked until a reviewed implementation and procedure replace this gate.

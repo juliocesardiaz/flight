@@ -1,5 +1,8 @@
 # macOS setup: first Airblock session
 
+Student starting here? Follow the [step-by-step Bluetooth lab](student-bluetooth-test.md)
+and use this page for additional detail.
+
 For an Apple Silicon MacBook Air (including M2), using VS Code or Vim.
 Prepared for the 7 October 2026 session. This SDK is experimental: no Airblock
 was available during development, and no real-device behavior is verified.

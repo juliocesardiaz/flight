@@ -40,11 +40,16 @@ The simulator models one RGB indicator and connection state. It does not model
 firmware, battery measurements, aerodynamics, or flight. It requires no Bluetooth
 permissions or BLE package. `events` records exactly the simulated LED changes.
 
-## Tomorrow's Mac hardware test
+## Student Bluetooth lab
 
-Follow the [M2 Mac setup guide](docs/macos-setup.md) and
-[hub-only hardware checklist](docs/hardware-checklist.md). Use Terminal for the
-first run; edit in VS Code or Vim.
+Start with the [student Bluetooth walkthrough](docs/student-bluetooth-test.md):
+setup, scan, connection/inspection, expected output, troubleshooting, and a
+[results template](docs/student-test-results-template.md). Use Terminal for the
+first run; edit in VS Code or Vim. The [M2 Mac setup guide](docs/macos-setup.md)
+and [hub-only hardware checklist](docs/hardware-checklist.md) give more detail.
+
+A successful connection does not enable motors. The walkthrough explains what
+evidence and safeguards are needed for a later supervised motor bench test.
 
 ```sh
 python -m pip install -e '.[ble,dev]'

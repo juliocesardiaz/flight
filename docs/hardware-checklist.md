@@ -1,5 +1,8 @@
 # Airblock first-hardware-test checklist
 
+Student starting here? Follow the [step-by-step Bluetooth lab](student-bluetooth-test.md)
+and use this page for additional detail.
+
 Session: **7 October 2026** · Target: student M2 MacBook Air · Scope: one owned or
 school-authorized Airblock main controller, all propulsion modules detached.
 
