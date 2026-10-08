@@ -1,7 +1,37 @@
 # Protocol evidence and safety boundary
 
-Prepared 6 October 2026. This project has not been tested with an Airblock.
+Prepared 6 October 2026; updated with a BLE observation on 8 October 2026.
 These notes distinguish interoperability facts from unverified device behavior.
+
+## Observation on 8 October 2026
+
+One user-identified Airblock advertised a name in the form `Makeblock_LE` plus
+12 hexadecimal digits and no service UUIDs. The original default scan therefore
+missed it; exact-name scanning succeeded. Default discovery now recognizes that
+name format as a candidate hint, without automatically connecting or identifying
+every Makeblock device as an Airblock.
+
+On an arm64 Mac running macOS 26.5.2, Python 3.13.16, and Bleak 3.0.2, a separate
+metadata-only Bleak diagnostic connected, enumerated three services and thirteen
+characteristics, matched the expected FFE1/FFE2/FFE3 profile, and confirmed
+disconnection. It sent no application commands, performed no characteristic
+reads, and subscribed to no notifications. The user reported motors attached and
+explicitly requested that connection. The SDK's `--confirm-detached` flag was
+not asserted; this was not validation of the documented hub-only procedure.
+Raw selected-device results remain in local, ignored `hardware-notes*.json` files.
+
+This observation establishes BLE access to one controller. Its firmware remains
+unknown, and no LED, motor, takeoff, landing, or link-loss behavior was tested.
+The SDK's existing hardware-write block and inspection preconditions remain.
+
+The current manufacturer Neuron engine at commit `87517ccb` was rechecked and
+contains no Airblock flight definitions. The public Android and iPhone source
+trees also expose no Airblock-specific files. In the community
+[manager at commit 3519fe6](https://github.com/Arcaneless/MyoAirblock-android/blob/3519fe6cafc546d1eeccfe9aa2b6fd5ca4aba451/app/src/main/java/com/arcaneless/myoairblock/AirBlockManager.java),
+the launched flag changes when a command is submitted, before confirmation from
+the controller. Its launch/stop classes do not establish a validated stop or
+link-loss procedure for this unit. No community motor implementation was copied
+or transmitted.
 
 ## What is implemented
 

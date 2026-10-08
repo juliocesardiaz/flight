@@ -4,7 +4,8 @@ A small Python learning toolkit for the Makeblock Airblock. Start with variables
 conditions, and functions in a simulator; then inspect a real controller over
 Bluetooth from a Mac.
 
-**Alpha, hardware untested. This version does not control flight or real LEDs.**
+**Alpha. BLE discovery and service inspection have been observed on one controller.
+This version does not control flight or real LEDs.**
 Live LED encoding is not sufficiently verified, so hardware command writes are
 blocked. The real-device milestone is **discovery → explicit device selection →
 connection → GATT service inspection → disconnect**, with all propulsion modules
@@ -60,7 +61,12 @@ flight inspect --device 'UUID_FROM_THIS_MAC' --confirm-detached --timeout 10
 ```
 
 The placeholder must be replaced with an actual peripheral UUID. `scan` lists
-only candidate names/services; it never auto-connects. An alternate, known name
+only candidate names/services; it never auto-connects. It recognizes Airblock
+names, the observed `Makeblock_LE` plus 12 hexadecimal digits name format, and
+advertisements containing the candidate FFE1 service. The observed controller
+advertised no service UUIDs, so the Makeblock name hint is necessary to discover
+it. Other Makeblock products may use this format too; confirm the candidate's
+identity before connecting. An alternate, known name
 can be selected with `flight scan --name 'EXACT_NAME'`. Names and services are
 hints, not authentication. A profile mismatch is reported and cannot unlock
 commands. No nearby-device inventory is written to disk.

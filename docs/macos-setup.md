@@ -5,7 +5,10 @@ and use this page for additional detail.
 
 For an Apple Silicon MacBook Air (including M2), using VS Code or Vim.
 Prepared for the 7 October 2026 session. This SDK is experimental: no Airblock
-was available during development, and no real-device behavior is verified.
+was available during initial development. A subsequent 8 October observation
+confirmed BLE discovery and service inspection on one controller; see
+[protocol status](protocol-status.md) for the exact scope. Flight and LED
+commands remain unverified.
 
 **Today's hardware goal is discovery and read-only GATT inspection.** The LED
 command protocol is not yet verified; hardware LED control is blocked. The

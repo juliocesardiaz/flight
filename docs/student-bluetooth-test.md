@@ -4,7 +4,8 @@
 finish disconnected. Record what happened so we can decide the next step.
 
 Use your M2 MacBook Air and Terminal. You can edit Python in VS Code or Vim.
-This toolkit is experimental and has not been tested on real hardware.
+This toolkit is experimental. BLE discovery and service inspection have been
+observed on one controller; see the [recorded scope](protocol-status.md).
 **The current version cannot run motors or real LEDs, even after it connects.**
 
 ## 1. Get ready with your teacher
@@ -86,7 +87,10 @@ Ask IT. [Bleak's permission guide](https://bleak.readthedocs.io/en/latest/backen
 ```
 
 This is sample output, not a tested device or an ID to paste. Names can differ
-and the advertised service list can be empty. Copy your own `device_id` only
+and the advertised service list can be empty. A real controller was observed
+advertising `Makeblock_LE` followed by 12 hexadecimal digits, with no service
+UUIDs; `flight scan` now includes that name format as a candidate. Other
+Makeblock products can use similar names. Copy your own `device_id` only
 after your teacher confirms which candidate is your controller. If several
 remain, compare scans with your hub powered off/on under supervision. Do not
 choose the first result just because it says Airblock.

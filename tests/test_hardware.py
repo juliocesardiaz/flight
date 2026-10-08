@@ -50,6 +50,47 @@ def test_scan_falls_back_to_device_name(ble):
     assert scan()[0].name == "Airblock"
 
 
+@pytest.mark.parametrize(
+    "local_name", ["Makeblock_LE001122aabbcc", "MAKEBLOCK_LE001122AABBCC", None]
+)
+def test_scan_finds_makeblock_le_without_advertised_services(ble, local_name):
+    # The inspected controller advertised this name format with no service UUIDs.
+    ble.found = {
+        DEVICE_ID: (device(name="Makeblock_LE001122aabbcc"), advertisement(local_name, ()))
+    }
+    result = scan()
+    assert len(result) == 1
+    assert result[0].device_id == DEVICE_ID
+    assert result[0].advertised_services == ()
+    assert [call[0] for call in ble.calls] == ["discover"]
+
+
+@pytest.mark.parametrize(
+    "name",
+    [
+        "Makeblock_LE",
+        "Makeblock_LE001122aabbc",
+        "Makeblock_LE001122aabbcc0",
+        "Makeblock_LE001122aabbcz",
+        "Other Makeblock_LE001122aabbcc",
+    ],
+)
+def test_makeblock_name_hint_requires_the_observed_format(ble, name):
+    ble.found = {DEVICE_ID: (device(name=name), advertisement(name, ()))}
+    assert scan() == ()
+
+
+def test_exact_name_filter_still_excludes_makeblock_candidates(ble):
+    ble.found = {
+        DEVICE_ID: (
+            device(name="Makeblock_LE001122aabbcc"),
+            advertisement("Makeblock_LE001122aabbcc", ()),
+        )
+    }
+    assert scan(name="Airblock") == ()
+    assert len(scan(name="Makeblock_LE001122aabbcc")) == 1
+
+
 @pytest.mark.parametrize("name", ["", "  ", 123])
 def test_invalid_scan_name_precedes_bluetooth(ble, name):
     with pytest.raises(ValueError):

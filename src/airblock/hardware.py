@@ -6,6 +6,7 @@ initialization is sent. OS-level BLE discovery traffic still occurs.
 """
 
 import asyncio
+import re
 from collections.abc import Callable, Coroutine
 from typing import Any, TypeVar
 
@@ -39,7 +40,7 @@ def _sync(operation: Callable[[], Coroutine[Any, Any, T]]) -> T:
 
 
 async def async_scan(*, timeout: float = 8, name: str | None = None) -> tuple[Candidate, ...]:
-    """Return only Airblock-name/FFE1 candidates, or an explicitly named device.
+    """Return Airblock/Makeblock_LE/FFE1 candidates, or an explicitly named device.
 
     A candidate is not verified hardware. Unrelated advertisements are discarded
     from the returned result and are never printed or persistently logged.
@@ -59,11 +60,14 @@ async def async_scan(*, timeout: float = 8, name: str | None = None) -> tuple[Ca
     candidates = []
     for device, advertisement in found.values():
         local_name = advertisement.local_name or device.name
+        normalized_name = (local_name or "").casefold()
         services = tuple(sorted(s.lower() for s in advertisement.service_uuids))
         matches = (
             local_name == name
             if name is not None
-            else "airblock" in (local_name or "").casefold() or SERVICE_UUID in services
+            else "airblock" in normalized_name
+            or re.fullmatch(r"makeblock_le[0-9a-f]{12}", normalized_name) is not None
+            or SERVICE_UUID in services
         )
         if matches:
             candidates.append(Candidate(device.address, local_name, services))
